@@ -211,3 +211,49 @@ export const getUserInfo = async (req, res) => {
     });
   }
 };
+
+export const deleteFriend = async (req, res) => {
+  try {
+    console.log("Delete friend called with params: ", req.params);
+    const userId = req.user._id;
+    const { friendId } = req.params;
+    
+    const user = await User.findOne({
+      _id: userId,
+      friends: friendId
+    });
+    const friend = await User.findById(friendId);
+
+    if(!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User is not a friend or User not found"
+      })
+    }
+
+    if(!friend) {
+      return res.status(404).json({
+        success: false,
+        message: "Friend not found"
+      })
+    }
+
+    await User.findByIdAndUpdate(userId, {
+      $pull: { friends: friendId },
+    })
+
+    await User.findByIdAndUpdate(friendId, {
+      $pull: { friends: userId },
+    })
+
+    res.status(200).json({
+      success: true,
+      message: "Friend deleted successfully"
+    })
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error in deleting friend"
+    })
+  }
+}

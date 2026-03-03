@@ -16,16 +16,21 @@ import { ChatContext } from '@/context/ChatContext'
 import { MdDeleteOutline } from "react-icons/md";
 import apiClient from '@/lib/api-client'
 import { DELETE_ALL_MESSAGES_ROUTES } from '@/utils/constants'
+import { useNavigate } from 'react-router-dom'
 
 const MessagesHeader = ({ onDeleteAll }) => {
     const { friends } = useContext(ChatContext);
     const { friendId } = useParams();
     const activeFriend = friends.find(friend => friend._id === friendId);
+    const navigate = useNavigate();
 
+    const onFriendInfoClick = () => {
+        navigate(`/chats/friendProfile/${friendId}`);
+    }
     if (!activeFriend) return null
     return (
-        <div className='bg-white w-full h-22  border-b-white border-l-white border-l-2 border-b-2 flex items-center justify-between p-5 shadow-md'>
-            <div className="user_info gap-4 flex justify-between items-center cursor-pointer">
+        <div className='dark:bg-[#37353E] bg-white w-full h-22 flex items-center justify-between p-5 shadow-sm dark:border-0'>
+            <div className="user_info gap-4 flex justify-between items-center cursor-pointer" onClick={onFriendInfoClick}>
                 <div className="user_avatar w-14 h-14 min-w-14">
                     <Avatar className='w-full h-full shadow-md border-2 border-white'>
                         <AvatarImage src={activeFriend.avatar} className='rounded-full' />
@@ -33,8 +38,8 @@ const MessagesHeader = ({ onDeleteAll }) => {
                     </Avatar>
                 </div>
                 <div className='flex-col justify-between items-center'>
-                    <div className="user_name text-[#2B2A2A] text-2xl font-bold">{activeFriend.name}</div>
-                    <p className='font-medium text-gray-500'>click here to get {activeFriend.name} info</p>
+                    <div className="dark:text-white user_name text-[#2B2A2A] text-2xl font-bold">{activeFriend.name}</div>
+                    <p className='dark:text-[#D3DAD9] font-medium text-gray-500'>click here to get {activeFriend.name} info</p>
                 </div>
             </div>
             <div>
@@ -42,8 +47,8 @@ const MessagesHeader = ({ onDeleteAll }) => {
                     <DropdownMenuTrigger asChild>
                         <Button size='icon-lg' className='relative overflow-hidden rounded-full
                 before:content-[""] before:bg-transparent
-                before:scale-80 hover:before:bg-[#f1f1f1] before:absolute hover:before:scale-100 before:duration-300 before:inset-0 before:rounded-full cursor-pointer transition-transform' >
-                            <span className='relative z-10 cursor-pointer'><SlOptionsVertical /></span>
+                before:scale-80 hover:before:bg-[#f1f1f1] before:absolute hover:before:scale-100 before:duration-300 before:inset-0 before:rounded-full cursor-pointer transition-transform dark:hover:before:bg-gray-700/30' >
+                            <span className='relative z-10 cursor-pointer'><SlOptionsVertical className='dark:text-white'/></span>
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>

@@ -1,113 +1,41 @@
-import React, { useContext, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { MdOutlineModeEditOutline } from "react-icons/md";
-import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
 import { Button } from '@/components/ui/button';
-import { FaRegUser } from "react-icons/fa";
-import { FiEdit2 } from "react-icons/fi";
-import { toast } from "sonner"
-import apiClient from '@/lib/api-client';
-import { PROFILE_ROUTES, UPLOAD_ROUTES } from '@/utils/constants';
-import { UserContext } from '@/context/UserContext';
+import React, { useContext } from 'react'
+import { FaArrowLeft } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { ChatContext } from '@/context/ChatContext';
 
 const Profile = () => {
-  const { user, setUser, getUserInfo } = useContext(UserContext);
-  const [image, setImage] = useState(null);
-  const [preview, setPreview] = useState(null);
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [loading, setLoading] = useState(false);
-  const fileRef = useRef();
   const navigate = useNavigate();
-  const openPicker = () => {
-    fileRef.current.click();
-  }
+  const { friendId } = useParams();
+  const {friends} = useContext(ChatContext);
 
-  const handleFile = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    setImage(file);
-    setPreview(URL.createObjectURL(file));
-  }
-
-  const handleSave = async (e) => {
-    e.preventDefault();
-
-    setLoading(true);
-
-    if (!name) {
-      toast.warning("Please enter required fields")
-      setLoading(false);
-      return;
-    }
-    try {
-      const formData = new FormData();
-      formData.append('file', image);
-
-      const response_Image = await apiClient.post(UPLOAD_ROUTES, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }, { withCredentials: true })
-
-      if (response_Image.data.success) {
-        const imageURL = response_Image.data.url;
-        const response_info = await apiClient.post(PROFILE_ROUTES, {
-          name,
-          avatar: imageURL,
-          description
-        })
-        
-        if (response_info.data.success)
-          setUser(prev => ({
-          ...prev,
-          ...response_info.data.user}));
-      }
-
-      toast.success('Profile saved successfully.');
-      setTimeout(() => {
-        navigate('/chats')
-      }, 500)
-    } catch (error) {
-      console.error("Error while saving the profile", error);
-      toast.error("Error occured while saving the profile");
-    } finally {
-      setLoading(false);
-    }
-
-
-  }
+  const friend = friends.find(f => f._id === friendId);
+  console.log(friend);
+  
   return (
-    <div className='flex justify-center items-center w-full h-screen'>
-      <form onSubmit={handleSave}>
-        <div className="h-120 w-180 shadow-lg flex items-center p-3">
-          <div className={`profileImage rounded-full w-50 h-50 min-w-50 flex items-center justify-center group border-black border bg-gray-500/50 relative cursor-pointer shadow-md ${preview ? '' : 'p-5'}`} onClick={openPicker}>
-            <div className='absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition rounded-full'>
-              <FiEdit2 className=' text-white text-4xl' />
-            </div>
-            <img src={preview || '/user.png'} alt="" className='w-full h-full object-fit rounded-full' />
-          </div>
-          <input type="file" accept='image/*' ref={fileRef} onChange={handleFile} className='hidden' />
-
-          <div className='flex flex-col w-full px-6 gap-6'>
-            <div className='gap-2 flex flex-col'>
-              <div className='flex gap-1'>
-                <Label htmlFor="text">Display Name</Label>
-                <span className='text-red-600 font-bold'>*</span>
-              </div>
-              <Input type="text" id="text" placeholder="Name" className='outline-0! ring-0!' value={name} onChange={(e) => setName(e.target.value)} />
-            </div>
-            <div className='flex flex-col gap-2'>
-              <Label>Description</Label>
-              <Textarea className='outline-0! ring-0! resize-none' placeholder='Enter your description...' value={description} onChange={e => setDescription(e.target.value)} />
-            </div>
-            <Button className={`bg-green-600 hover:bg-green-700 w-20 h-10 text-white text-lg shadow-md border border-white`} type='submit' disabled={loading}>Save</Button>
-          </div>
+    <div className='w-full h-screen flex justify-center flex-col gap-4'>
+      <div className='w-full flex justify-left items-center gap-2 sticky h-15'>
+        <Button className='cursor-pointer hover:bg-gray-300/50' onClick={() => navigate(-1)}>
+          <FaArrowLeft className='text-black text-2xl!' />
+        </Button>
+        <h1 className='text-2xl font-bold text-black'>Friends Info</h1>
+      </div>
+      <div className='flex-1 flex flex-col items-center justify-center max-h-screen w-full'>
+        <div className='w-40 h-40 rounded-full overflow-hidden shadow-md ' >
+          <img src={friend?.avatar} alt="" className='w-full h-full object-cover' />
         </div>
-      </form>
+        <div className='grid grid-cols-12 gap-6 mt-4 w-full max-w-[80%]'>
+          <h2 className='font-bold text-xl col-span-2  p-4'>Name:</h2>
+          <p className='bg-gray-300 col-span-10 p-4 rounded-md shadow-md text-lg' >{friend?.name}</p>
+        </div>
+        <div className='grid grid-cols-12 gap-4 mt-4 w-full max-w-[80%]'>
+          <h2 className='font-bold text-xl col-span-2 p-4'>Description:</h2>
+          <p className='bg-gray-300 col-span-10 p-4 rounded-md shadow-md row-span-4 text-lg' >{friend?.description}</p>
+        </div>
+        
+      </div>
+      <div></div>
     </div>
   )
 }

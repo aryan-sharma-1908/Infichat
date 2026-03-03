@@ -21,7 +21,7 @@ const ChatProvider = ({ children }) => {
     }
     useEffect(() => {
         fetchFriends();
-    }, [])
+    }, [friends.length]);
 
 
     return (

@@ -7,17 +7,21 @@ import SocketProvider from './context/SocketContext'
 import ChatProvider from './context/ChatContext'
 import UserProvider from './context/UserContext'
 import MessageProvider from './context/MesageContext'
+import ThemeProvider from './context/ThemeContext';
+
 createRoot(document.getElementById('root')).render(
   <>
-    <MessageProvider>
-      <UserProvider>
-        <ChatProvider>
-          <SocketProvider>
-            <App />
-          </SocketProvider>
-        </ChatProvider>
-      </UserProvider>
-    </MessageProvider>
+    <ThemeProvider>
+      <MessageProvider>
+        <UserProvider>
+          <ChatProvider>
+            <SocketProvider>
+              <App />
+            </SocketProvider>
+          </ChatProvider>
+        </UserProvider>
+      </MessageProvider>
+    </ThemeProvider>
     <Toaster richColors position="top-right" />
   </>,
 )

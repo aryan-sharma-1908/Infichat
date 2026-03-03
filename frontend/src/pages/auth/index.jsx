@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Background from '@/assets/login2.png'
 import Victory from '@/assets/victory.svg'
@@ -17,9 +17,9 @@ const Auth = () => {
     const [confirmPassword, setConfirmPassword] = useState("")
     const [isLoading, setIsLoading] = useState(false);
     const [tab, setTab] = useState('signup');
-    const {setUser, getUserInfo} = useContext(UserContext);
+    const { setUser, getUserInfo } = useContext(UserContext);
     const navigate = useNavigate();
-    
+
     const handleLogin = async () => {
         setIsLoading(true);
 
@@ -39,11 +39,16 @@ const Auth = () => {
                 ...prev,
                 ...response.data.user
             }));
-            toast.success("Login Successful.")
-            navigate('/chats');
+            if (response.data.success) {
+                toast.success(response.data.message);
+                navigate('/chats');
+            } else {
+                toast.error(response.data.message);
+            }
         } catch (error) {
-            console.error('Something went wrong while logging in! ', error)
-            toast.error('Error occurred during login!')
+            console.error('Something went wrong while logging in! ', error);
+            const errorMessage = error.response?.data?.message || "Error occurred during login";
+            toast.error(errorMessage);
         } finally {
             setIsLoading(false)
             setEmail("")
@@ -66,7 +71,7 @@ const Auth = () => {
         }
 
         try {
-            
+
             const response = await apiClient.post(`${SIGNUP_ROUTES}`, {
                 email: email,
                 password: password
@@ -87,6 +92,20 @@ const Auth = () => {
         }
     }
 
+    const handleEnterPressSignUp = (e) => {
+        if(e.key === 'Enter') {
+            e.preventDefault();
+            handleSignup();
+        }
+    }
+
+    const handleEnterPressLogin = (e) => {
+        if(e.key === 'Enter') {
+            e.preventDefault();
+            handleLogin();
+        }
+    }
+
     return (
         <div className='h-screen w-screen flex items-center justify-center'>
             <div className='h-[80vh] bg-white border-2 border-white text-opacity-90 shadow-2xl w-[80vw] md:w-[90vw] lg:w-[70vw] xl:w-[60vw] rounded-3xl grid xl:grid-cols-2'>
@@ -96,7 +115,7 @@ const Auth = () => {
                             <h1 className='text-5xl font-bold md:text-6xl text-center'>Welcome</h1>
                             <img src={Victory} alt="Victory emoji" className='h-[100px]' />
                         </div>
-                        
+
                         <p className='font-medium text-center'>Fill in the details to get started with the best chat app</p>
                         <div className="flex items-center justify-center w-full">
                             <Tabs value={tab} onValueChange={setTab} className='w-3/4'>
@@ -105,26 +124,26 @@ const Auth = () => {
                                     <TabsTrigger value='signup' className='data-[state=active]:bg-transparent text-black border-b-2 rounded-none w-full data-[state=active]:text-black data-[state=active]:font-semibold data-[state=active]:border-b-purple-500 p-3 transition-all duration-300 text-opacity-90'>Signup</TabsTrigger>
                                 </TabsList>
                                 <TabsContent value='login' className='flex flex-col gap-5 '>
-                                    <Input type="email" placeholder='Email' value={email} onChange={(e) => {
+                                    <Input type="email" placeholder='Email' value={email} onKeyDown={handleEnterPressLogin} onChange={(e) => {
                                         setEmail(e.target.value)
                                     }}
                                         className='rounded-full p-6' />
-                                    <Input type="password" placeholder='Password' value={password} onChange={(e) => {
+                                    <Input type="password" placeholder='Password' value={password} onKeyDown={handleEnterPressLogin} onChange={(e) => {
                                         setPassword(e.target.value)
                                     }}
                                         className='rounded-full p-6' />
                                     <Button className='rounded-full p-6 bg-black text-white active:scale-95 text-xl' onClick={handleLogin}>Login</Button>
                                 </TabsContent>
                                 <TabsContent value='signup' className='flex flex-col gap-5'>
-                                    <Input type="email" placeholder='Email' value={email} required onChange={(e) => {
-                                        setEmail(e.target.value)
+                                    <Input type="email" placeholder='Email' value={email} required onKeyDown={handleEnterPressSignUp} onChange={(e) => {
+                                        setEmail(e.target.value) 
                                     }}
                                         className='rounded-full p-6' />
-                                    <Input type="password" placeholder='Password' value={password} required onChange={(e) => {
+                                    <Input type="password" placeholder='Password' value={password} required onKeyDown={handleEnterPressSignUp} onChange={(e) => {
                                         setPassword(e.target.value)
                                     }}
                                         className='rounded-full p-6' />
-                                    <Input type="password" placeholder='Confirm Password' value={confirmPassword} required onChange={(e) => {
+                                    <Input type="password" placeholder='Confirm Password' value={confirmPassword} required onKeyDown={handleEnterPressSignUp} onChange={(e) => {
                                         setConfirmPassword(e.target.value)
                                     }}
                                         className='rounded-full p-6' />

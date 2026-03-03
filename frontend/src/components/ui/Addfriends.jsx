@@ -33,7 +33,7 @@ const Addfriends = () => {
       <Dialog>
         <DialogTrigger asChild>
           <div className='active:scale-95 flex items-center' onClick={handleOpenUsersList}>
-            <FiPlusCircle className='w-full text-2xl min-w-full  hover:bg-gray-100' />
+            <FiPlusCircle className='w-full text-2xl min-w-full  hover:bg-gray-100 dark:text-white dark:hover:bg-black rounded-full' />
           </div>
         </DialogTrigger>
         <DialogContent className='bg-white/80 '>

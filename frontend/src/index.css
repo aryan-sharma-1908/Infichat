@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -22,4 +24,16 @@
     --primary: 210 40% 98%;
     --primary-foreground: 222.2 47.4% 11.2%;
   }
+}
+
+.dark * {
+  scrollbar-color: #AEAEAE #37353E;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #37353E;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background-color: black
 }

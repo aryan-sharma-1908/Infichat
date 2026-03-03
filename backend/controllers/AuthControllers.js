@@ -16,7 +16,7 @@ export const signup = async (req, res) => {
     }
 
     const user = await User.findOne({
-      email
+      email,
     });
 
     if (user) {
@@ -27,16 +27,16 @@ export const signup = async (req, res) => {
       });
     }
 
-    const newUser =  await User.create({
+    const newUser = await User.create({
       email,
-      password
+      password,
     });
 
     res.status(201).json({
       user: {
         _id: newUser._id,
         email: newUser.email,
-        profileSetup: newUser.profileSetup
+        profileSetup: newUser.profileSetup,
       },
       success: true,
       message: "User created successfully",
@@ -88,15 +88,15 @@ export const login = async (req, res) => {
         email: user.email,
       },
       process.env.JWT_SECRET,
-      { expiresIn: "7d" }
+      { expiresIn: "7d" },
     );
 
-    res.cookie('token', token, {
+    res.cookie("token", token, {
       httpOnly: process.env.NODE_ENV === "production",
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000,
-    })
+    });
 
     res.status(200).json({
       success: true,
@@ -104,30 +104,36 @@ export const login = async (req, res) => {
         _id: user._id,
         email: user.email,
       },
-      message: "Login successful"
-    })
+      message: "Login successful",
+    });
   } catch (error) {
     console.error("Login error: ", error);
     res.status(500).json({
       success: false,
-      message: "Internal server error"
-    })
+      message: "Internal server error",
+    });
   }
 };
 
+export const logout = async (req, res) => {
+  try {
+    res.clearCookie('token', {
+      httpOnly: process.env.NODE_ENV === 'production',
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    });
 
-// export const checkAuth = async (req,res) => {
-//   try {
-//     res.status(204).json({
-//       success: true,
-//       user: req.user,
-//       message: "User is Authenticated."
-//     })
-//   } catch (error) {
-//     console.error('Error in checkAuth: ', error);
-//     res.status(500).json({
-//       success: false,
-//       message: "Error occurred during checkAuth"
-//     })
-//   }
-// }
+    res.status(200).json({
+      success: true,
+      message: 'Logged out successfully.'
+    })
+    
+  } catch (error) {
+    console.error("Error while logging out: ", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
