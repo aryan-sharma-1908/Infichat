@@ -15,7 +15,6 @@ const SocketProvider = ({ children }) => {
 
     const socketInstance = io(apiClient.defaults.baseURL, {
       withCredentials: true,
-      transports: ["websocket"],
     });
 
     socketRef.current = socketInstance;
