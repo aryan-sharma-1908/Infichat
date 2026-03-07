@@ -87,16 +87,17 @@ const ProfileSetup = () => {
   }
   return (
     <div className='min-h-screen w-full flex items-center justify-center px-4 py-8 bg-[linear-gradient(160deg,#fef5f6_0%,#f2fafd_50%,#f8f4f8_100%)] dark:bg-[linear-gradient(135deg,#1a1516_0%,#0f1a1f_50%,#151a24_100%)] relative overflow-hidden'>
-      <div className="flex items-center justify-between mb-6 absolute top-5 left-5 gap-3">
+      <header className="absolute top-0 left-0 right-0 px-5 py-4 flex items-center justify-between">
         <h1 className='text-2xl font-semibold text-gray-800 dark:text-white'>
           <span className='text-[#fbadba]'>Infi</span>
           <span className='text-[#2c7a8a] dark:text-[#8ADCF9]'>Chat</span>
         </h1>
 
-        <div className="opacity-70 hover:opacity-100 transition">
+        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/60 dark:bg-white/10 backdrop-blur-sm border border-gray-200/50 dark:border-white/10 shadow-sm">
+          <span className="text-xs font-medium text-gray-500 dark:text-gray-400 hidden sm:inline">Theme</span>
           <ThemeButton />
         </div>
-      </div>
+      </header>
       <form onSubmit={handleSave} className='w-full max-w-lg'>
         <div className='bg-white dark:bg-[#37353E] rounded-2xl shadow-md border border-gray-200 dark:border-[#44444E] overflow-hidden'>
           {/* Top accent strip */}
