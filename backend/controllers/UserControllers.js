@@ -1,3 +1,5 @@
+import Conversation from "../models/ConversationModel.js";
+import Message from "../models/MessageModel.js";
 import User from "../models/UserModel.js";
 
 export const getUsers = async (req, res) => {
@@ -49,7 +51,7 @@ export const updateProfile = async (req, res) => {
         name: user.name,
         profileSetup: user.profileSetup,
         avatar: user.avatar,
-        description: user.description
+        description: user.description,
       },
       message: "Profile updated successfully",
     });
@@ -137,7 +139,9 @@ export const addFriendIfNotExists = async (req, res) => {
     });
 
     // Fetch the newly added friend's public info to return to the client
-    const newFriend = await User.findById(friendId).select("name avatar description");
+    const newFriend = await User.findById(friendId).select(
+      "name avatar description",
+    );
 
     res.status(200).json({
       success: true,
@@ -217,43 +221,56 @@ export const deleteFriend = async (req, res) => {
     console.log("Delete friend called with params: ", req.params);
     const userId = req.user._id;
     const { friendId } = req.params;
-    
+
     const user = await User.findOne({
       _id: userId,
-      friends: friendId
+      friends: friendId,
     });
     const friend = await User.findById(friendId);
 
-    if(!user) {
+    if (!user) {
       return res.status(404).json({
         success: false,
-        message: "User is not a friend or User not found"
-      })
+        message: "User is not a friend or User not found",
+      });
     }
 
-    if(!friend) {
+    if (!friend) {
       return res.status(404).json({
         success: false,
-        message: "Friend not found"
-      })
+        message: "Friend not found",
+      });
+    }
+    const conversation = await Conversation.findOne({
+      members: { $all: [userId, friendId] },
+    });
+
+    if (conversation) {
+      await Conversation.deleteOne({
+        members: { $all: [userId, friendId] },
+      });
+
+      await Message.deleteMany({
+        conversationId: conversation._id,
+      });
     }
 
     await User.findByIdAndUpdate(userId, {
       $pull: { friends: friendId },
-    })
+    });
 
     await User.findByIdAndUpdate(friendId, {
       $pull: { friends: userId },
-    })
+    });
 
     res.status(200).json({
       success: true,
-      message: "Friend deleted successfully"
-    })
+      message: "Friend deleted successfully",
+    });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: "Error in deleting friend"
-    })
+      message: "Error in deleting friend",
+    });
   }
-}
+};

@@ -3,11 +3,8 @@ import { getOrCreateConversation } from "../service/ConversationService.js";
 
 const socketIdMap = new Map();
 
-
 export const initSocket = (io) => {
-
   io.on("connection", (socket) => {
-
     const userId = socket.userId;
     if (!userId) {
       socket.disconnect();
@@ -20,52 +17,64 @@ export const initSocket = (io) => {
 
     socket.on("join_conversation", (conversationId) => {
       socket.join(conversationId);
-      console.log('Joined conversation: ',conversationId)
+      console.log("Joined conversation: ", conversationId);
     });
 
-    socket.on("send_message", async ({ text, friendId, clientMessageId }) => {
-      try {
-        const senderId = socket.userId;
-        const conversation = await getOrCreateConversation(senderId, friendId);
+    socket.on(
+      "send_message",
+      async ({ text, friendId, clientMessageId, image }) => {
+        if(!text && !image) {
+          return;
+        }
+        try {
+          const senderId = socket.userId;
+          const conversation = await getOrCreateConversation(
+            senderId,
+            friendId,
+          );
 
-        const newMessage = await Message.create({
-          conversationId: conversation._id,
-          clientMessageId,
-          senderId,
-          text,
-          status: "sent",
-        });
+          const newMessage = await Message.create({
+            conversationId: conversation._id,
+            clientMessageId,
+            senderId,
+            image: image || null,
+            text,
+            status: "sent",
+          });
 
-        console.log(newMessage)
+          const messagePayload = {
+            _id: newMessage._id,
+            conversationId: conversation._id,
+            senderId,
+            clientMessageId,
+            image: newMessage.image,
+            text,
+            status: "sent",
+            createdAt: newMessage.createdAt,
+          };
 
-        io.to(conversation._id.toString()).emit("new_message", {
-          _id: newMessage._id,
-          conversationId: conversation._id,
-          senderId,
-          clientMessageId,
-          text,
-          status: 'sent',
-          createdAt: newMessage.createdAt
-        });
+          console.log(newMessage);
 
-        socket.emit('new_message', {
-          _id: newMessage._id,
-          conversationId: conversation._id,
-          senderId,
-          clientMessageId,
-          text,
-          status: 'sent',
-          createdAt: newMessage.createdAt
-        })
-        
-      } catch (error) {
-        console.error("Error in sendMessage: ", error);
-        socket.emit("message_error", {
-          clientMessageId,
-          message: "error in sending message",
-        });
-      }
-    });
+          io.to(conversation._id.toString()).emit(
+            "new_message",
+            messagePayload,
+          );
+
+          const receiverSocketId = socketIdMap.get(friendId);
+
+          if (receiverSocketId) {
+            io.to(receiverSocketId).emit("new_message", messagePayload);
+          }
+
+        } catch (error) {
+          console.error("Error in sendMessage: ", error);
+          socket.emit("message_error", {
+            clientMessageId,
+            message: "error in sending message",
+          });
+        }
+      },
+    );
 
     socket.on("disconnect", () => {
       socketIdMap.delete(userId);

@@ -20,7 +20,7 @@ const App = () => {
             <Route path='friendProfile/:friendId' element={<Profile />}></Route>
           </Route>
         </Route>
-        <Route path='/profilesetup' element={<ProfileSetup />}></Route>
+        <Route path='/profile-setup' element={<ProfileSetup />}></Route>
         <Route path='*' element={<Navigate to='/auth' />}></Route>
       </Routes>
     </BrowserRouter>

@@ -32,7 +32,7 @@ const MessagesList = ({ messages, deleteMessage }) => {
 
     const openMessageContextMenu = (e, messageId, from) => {
         e.preventDefault();
-        e.stopPropagation(); 
+        e.stopPropagation();
         let x = e.clientX;
         let y = e.clientY;
         const containerHeight = 180;
@@ -53,14 +53,32 @@ const MessagesList = ({ messages, deleteMessage }) => {
         })
     }
 
+    console.log(messages);
+    
+
     return (
         <div className='flex flex-col gap-2 py-2 px-2'>
             {messages.map(message => (
-                <MessageBubble key={message._id ?? message.clientMessageId} text={message.text} from={message.senderId === user._id ? 'me' : 'them'} deletedForEveryone={!!message.deletedAt} time={new Date(message.createdAt).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                })} status={message.status} onRightClick={(e) => openMessageContextMenu(e, message._id, message.senderId === user._id ? 'me' : 'them')}
+                <MessageBubble
+                    key={message._id ?? message.clientMessageId}
+                    text={message.text}
+                    image={message.image}
+                    from={message.senderId === user._id ? 'me' : 'them'}
+                    deletedForEveryone={!!message.deletedAt}
+                    time={new Date(message.createdAt).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                    })}
+                    status={message.status}
+                    onRightClick={(e) =>
+                        openMessageContextMenu(
+                            e,
+                            message._id,
+                            message.senderId === user._id ? 'me' : 'them'
+                        )
+                    }
                 />
+
 
             ))}
             {contextMenu && (

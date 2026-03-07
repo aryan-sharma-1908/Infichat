@@ -16,8 +16,8 @@ const Auth = () => {
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
     const [isLoading, setIsLoading] = useState(false);
-    const [tab, setTab] = useState('signup');
-    const { setUser, getUserInfo } = useContext(UserContext);
+
+    const { setUser, getUserInfo, tab, setTab } = useContext(UserContext);
     const navigate = useNavigate();
 
     const handleLogin = async () => {
@@ -35,10 +35,6 @@ const Auth = () => {
                 password: password
             }, { withCredentials: true })
             await getUserInfo();
-            setUser(prev => ({
-                ...prev,
-                ...response.data.user
-            }));
             if (response.data.success) {
                 toast.success(response.data.message);
                 navigate('/chats');
@@ -80,7 +76,6 @@ const Auth = () => {
             console.log(`${email} signup successful.`)
             toast.success('Signup successful.')
             setTab('login');
-
         } catch (error) {
             toast.error('Something went Wrong!')
             console.error('Error occured during signup!')

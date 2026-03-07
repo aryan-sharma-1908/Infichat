@@ -33,8 +33,8 @@ const ChatsFooter = ({ name, avatar }) => {
 
     return (
         <div className='dark:bg-[#37353E] bg-white flex items-center justify-between p-4 shadow-[0_-4px_6px_-3px_rgba(0,0,0,0.1)] dark:shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]'>
-            <div className='flex justify-between items-center gap-2 active:bg-gray-300 cursor-pointer'>
-                <div className=' rounded-full w-12 h-12 overflow-hidden border-2 border-transparent hover:border-green-400 shadow-md box-border'><img src={avatar} alt="" className='w-full h-full' /></div>
+            <div className='flex justify-between items-center gap-2 cursor-pointer active:bg-gray-500 h-full' onClick={() => navigate('/profile-setup')}>
+                <div className='rounded-full w-12 h-12 overflow-hidden border-2 border-transparent hover:border-green-400 shadow-md box-border'><img src={avatar} alt="" className='w-full h-full' /></div>
                 <div>
                     <h1 className='dark:text-white text-black text-2xl font-bold leading-5 '>{name}</h1>
                     <p className='text-[#7F7F7F] dark:text-[#D3DAD9]'>click here to get user info.</p>

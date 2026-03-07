@@ -1,4 +1,4 @@
-import { createContext, useRef, useState } from "react";
+import { createContext, useRef, useState, useMemo } from "react";
 import { io } from "socket.io-client";
 import apiClient from "@/lib/api-client";
 
@@ -12,7 +12,7 @@ const SocketProvider = ({ children }) => {
     // Prevent duplicate connections
     if (socketRef.current) return;
     console.log('called');
-    
+
     const socketInstance = io(apiClient.defaults.baseURL, {
       withCredentials: true,
       transports: ["websocket"],
@@ -42,14 +42,14 @@ const SocketProvider = ({ children }) => {
     setSocket(null);
   };
 
+  const value = useMemo(() => ({
+    socket,
+    connectSocket,
+    disconnectSocket,
+  }), [socket]);
+
   return (
-    <SocketContext.Provider
-      value={{
-        socket,
-        connectSocket,
-        disconnectSocket,
-      }}
-    >
+    <SocketContext.Provider value={value}>
       {children}
     </SocketContext.Provider>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -13,8 +13,10 @@ import apiClient from '@/lib/api-client';
 import { toast } from 'sonner';
 import { NON_FRIENDS_ROUTES } from '@/utils/constants.js'
 import UserData from './UserData';
+import { ChatContext } from '@/context/ChatContext';
 const Addfriends = () => {
   const [usersData, setUsersData] = useState([]);
+  const { setFriends } = useContext(ChatContext);
 
   const handleOpenUsersList = async () => {
     try {
@@ -43,18 +45,23 @@ const Addfriends = () => {
 
             </DialogDescription>
           </DialogHeader>
-          {
-            usersData.map(userData => (
-              <UserData
-                key={userData._id}
-                name={userData.name}
-                avatar={userData.avatar}
-                _id={userData._id}
-                description={userData.description}
-                onAdded={() => setUsersData(prev => prev.filter(u => u._id !== userData._id))}
-              />
-            ))
-          }
+
+          <div className='overflow-y-auto max-h-105 scroll-smooth pr-4 overscroll-contain'>
+            {
+              usersData.map(userData => (
+                <UserData
+                  key={userData._id}
+                  name={userData.name}
+                  avatar={userData.avatar}
+                  _id={userData._id}
+                  description={userData.description}
+                  onAdded={() => {
+                    setUsersData(prev => prev.filter(u => u._id !== userData._id))
+                  }}
+                />
+              ))
+            }
+          </div>
         </DialogContent>
       </Dialog>
     </>

@@ -8,7 +8,11 @@ const MessageSchema = new mongoose.Schema({
     },
     text: {
         type: String,
-        required: true
+        default: ""
+    },
+    image: {
+        type: String,
+        default: null
     },
     conversationId: {
         type: mongoose.Schema.Types.ObjectId,

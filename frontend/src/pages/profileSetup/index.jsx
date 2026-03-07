@@ -9,15 +9,15 @@ import { FaRegUser } from "react-icons/fa";
 import { FiEdit2 } from "react-icons/fi";
 import { toast } from "sonner"
 import apiClient from '@/lib/api-client';
-import { PROFILE_ROUTES, UPLOAD_ROUTES } from '@/utils/constants';
+import { PROFILE_ROUTES, IMAGE_UPLOAD_ROUTES } from '@/utils/constants';
 import { UserContext } from '@/context/UserContext';
 
 const ProfileSetup = () => {
   const { user, setUser, getUserInfo } = useContext(UserContext);
   const [image, setImage] = useState(null);
-  const [preview, setPreview] = useState(null);
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
+  const [preview, setPreview] = useState(user.avatar || "");
+  const [name, setName] = useState(user.name || '');
+  const [description, setDescription] = useState(user.description || "");
   const [loading, setLoading] = useState(false);
   const fileRef = useRef();
   const navigate = useNavigate();
@@ -39,19 +39,24 @@ const ProfileSetup = () => {
     setLoading(true);
 
     if (!name) {
-      toast.warning("Please enter required fields")
+      toast.warning("Please enter your name")
       setLoading(false);
       return;
     }
+
+    if (!image) {
+      toast.warning("Please select a profile image")
+      setLoading(false);
+      return;
+    }
+
     try {
       const formData = new FormData();
-      formData.append('file', image);
+      formData.append('image', image);
 
-      const response_Image = await apiClient.post(UPLOAD_ROUTES, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }, { withCredentials: true })
+      const response_Image = await apiClient.post(IMAGE_UPLOAD_ROUTES, formData, {
+        withCredentials: true
+      })
 
       if (response_Image.data.success) {
         const imageURL = response_Image.data.url;
@@ -59,12 +64,13 @@ const ProfileSetup = () => {
           name,
           avatar: imageURL,
           description
-        })
-        
+      })
+
         if (response_info.data.success)
           setUser(prev => ({
-          ...prev,
-          ...response_info.data.user}));
+            ...prev,
+            ...response_info.data.user
+          }));
       }
 
       toast.success('Profile saved successfully.');

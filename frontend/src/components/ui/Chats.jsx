@@ -20,7 +20,7 @@ import { UserContext } from '@/context/UserContext'
 import ChatsFooter from './ChatsFooter'
 const Chats = () => {
   const { friendId } = useParams();
-  const { friends, setFriends } = useContext(ChatContext);
+  const { friends, setFriends, fetchFriends } = useContext(ChatContext);
   const navigate = useNavigate();
   const { connectSocket, disconnectSocket } = useContext(SocketContext);
   const { user } = useContext(UserContext);
@@ -38,11 +38,14 @@ const Chats = () => {
   useEffect(() => {
     if (user) {
       connectSocket();
+      fetchFriends();
     }
     return () => {
       disconnectSocket();
     };
   }, [user]);
+
+
 
   const filteredFriends = useMemo(() => {
     return friends.filter(friend => friend.name.toLowerCase().includes(searchQuery.toLowerCase()))

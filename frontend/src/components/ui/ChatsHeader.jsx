@@ -5,12 +5,19 @@ import Addfriends from './Addfriends';
 const ChatsHeader = ({ setSearchQuery, searchQuery }) => {
 
   const handleSearchQuery = (e) => {
-      setSearchQuery(e.target.value)
+    setSearchQuery(e.target.value)
   }
   return (
     <div className='dark:bg-[#37353E] bg-white w-full border-b-white border-b-2 pb-2 dark:border-0'>
-      <div className='flex justify-between px-6 py-4'>
-        <h1 className='text-4xl font-extrabold font-serif dark:text-white'>ChatApp</h1>
+      <div className='flex justify-between px-6 py-2'>
+        <div className='flex items-center'>
+          <div className='w-14 h-14 rounded-full translate-y-[3px]'>
+            <img src="/logo.png" alt="" className='w-full h-full object-cover' />
+          </div>
+          <h1 className="text-2xl font-semibold text-gray-900/70 dark:text-white/70">
+            InfiChat
+          </h1>
+        </div>
         <Addfriends />
       </div>
 
@@ -21,7 +28,7 @@ const ChatsHeader = ({ setSearchQuery, searchQuery }) => {
             value={searchQuery} onChange={handleSearchQuery} className='dark:text-white placeholder:text-[#D3DAD9]'
           />
           <InputGroupAddon>
-            <CiSearch className='dark:text-[#D3DAD9]'/>
+            <CiSearch className='dark:text-[#D3DAD9]' />
           </InputGroupAddon>
         </InputGroup>
 
