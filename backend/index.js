@@ -23,6 +23,7 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: [process.env.ORIGIN],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true
   }
 });
@@ -43,7 +44,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Chat server running 🚀");
 });
 
 app.use("/api/auth", authRoutes);
