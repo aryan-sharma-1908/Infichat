@@ -20,10 +20,6 @@ const ChatProvider = ({ children }) => {
         }
     }
 
-    useEffect(() => {
-        fetchFriends();
-    }, []);
-
     const value = useMemo(() => ({
         friends,
         isActiveChat,
