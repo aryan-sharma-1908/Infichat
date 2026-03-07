@@ -32,8 +32,8 @@ const MessagesHeader = ({ onDeleteAll }) => {
         <div className='dark:bg-[#37353E] bg-white w-full h-22 flex items-center justify-between p-5 shadow-sm dark:border-0'>
             <div className="user_info gap-4 flex justify-between items-center cursor-pointer" onClick={onFriendInfoClick}>
                 <div className="user_avatar w-14 h-14 min-w-14">
-                    <Avatar className='w-full h-full shadow-md border-2 border-white'>
-                        <AvatarImage src={activeFriend.avatar} className='rounded-full' />
+                    <Avatar className='w-full h-full shadow-md border-2 border-white '>
+                        <AvatarImage src={activeFriend.avatar} className='rounded-full object-cover' />
                         <AvatarFallback>{activeFriend.name}</AvatarFallback>
                     </Avatar>
                 </div>

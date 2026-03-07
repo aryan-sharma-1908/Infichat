@@ -10,7 +10,7 @@ import apiClient from '@/lib/api-client';
 import { PROFILE_ROUTES, IMAGE_UPLOAD_ROUTES } from '@/utils/constants';
 import { UserContext } from '@/context/UserContext';
 import ThemeButton from '@/components/ui/ThemeButton'
-
+import { FaArrowLeft } from "react-icons/fa";
 const ProfileSetup = () => {
   const { user, setUser, getUserInfo } = useContext(UserContext);
   const [image, setImage] = useState(null);
@@ -88,10 +88,13 @@ const ProfileSetup = () => {
   return (
     <div className='min-h-screen w-full flex items-center justify-center px-4 py-8 bg-[linear-gradient(160deg,#fef5f6_0%,#f2fafd_50%,#f8f4f8_100%)] dark:bg-[linear-gradient(135deg,#1a1516_0%,#0f1a1f_50%,#151a24_100%)] relative overflow-hidden'>
       <header className="absolute top-0 left-0 right-0 px-5 py-4 flex items-center justify-between">
-        <h1 className='text-2xl font-semibold text-gray-800 dark:text-white'>
-          <span className='text-[#fbadba]'>Infi</span>
-          <span className='text-[#2c7a8a] dark:text-[#8ADCF9]'>Chat</span>
-        </h1>
+        <div className='flex items-center gap'>
+          <img src="/logo.png" alt="Logo" className="h-10 w-10" />
+          <h1 className='text-2xl font-semibold text-gray-800 dark:text-white'>
+            <span className='text-[#fbadba]'>Infi</span>
+            <span className='text-[#2c7a8a] dark:text-[#8ADCF9]'>Chat</span>
+          </h1>
+        </div>
 
         <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/60 dark:bg-white/10 backdrop-blur-sm border border-gray-200/50 dark:border-white/10 shadow-sm">
           <span className="text-xs font-medium text-gray-500 dark:text-gray-400 hidden sm:inline">Theme</span>
@@ -105,7 +108,10 @@ const ProfileSetup = () => {
             <span className='flex-1 bg-[#fbadba]' />
             <span className='flex-1 bg-[#8ADCF9]' />
           </div>
-          <div className='px-6 py-6'>
+          <div className='px-6 py-6 relative group'>
+            <Button className='cursor-pointer hover:bg-gray-300/50 absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition duration-300' onClick={() => navigate(-1)}>
+              <FaArrowLeft className='text-black text-2xl dark:text-white' />
+            </Button>
             <div className='text-center mb-6'>
               <h1 className='text-2xl font-semibold text-gray-800 dark:text-white'>
                 <span className='text-[#fbadba]'>Profile</span>
@@ -124,7 +130,7 @@ const ProfileSetup = () => {
                   className='relative rounded-full w-28 h-28 sm:w-32 sm:h-32 flex items-center justify-center overflow-hidden border-2 border-[#fbadba]/50 dark:border-[#8ADCF9]/50 bg-gray-100 dark:bg-white/10 shadow-md group cursor-pointer'
                 >
                   <img src={preview || '/user.png'} alt='' className='w-full h-full object-cover' />
-                  <div className='absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition rounded-full'>
+                  <div className='absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition rounded-full'>
                     <FiEdit2 className='text-white text-2xl sm:text-3xl' />
                   </div>
                 </button>
@@ -160,7 +166,7 @@ const ProfileSetup = () => {
                 <Button
                   type='submit'
                   disabled={loading}
-                  className='rounded-xl bg-[#fbadba] hover:bg-[#f59aa8] text-gray-800 text-sm font-medium py-3 border-0 shadow-sm transition-colors active:scale-[0.99] mt-1'
+                  className='rounded-xl bg-[#fbadba] hover:bg-[#f59aa8] text-gray-800 text-sm font-medium py-3 border-0 shadow-sm transition-colors active:scale-[0.99] mt-1 cursor-pointer disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed '
                 >
                   {loading ? 'Saving...' : 'Save'}
                 </Button>
