@@ -79,7 +79,7 @@ const MessageInput = ({ onSend }) => {
           }} type='button'>
           <IoIosAttach className='text-2xl! font-bold! text-black dark:text-white' />
         </Button>
-        <Textarea className='w-full flex-1 focus-visible:ring-0 focus-visible:ring-offset-0 outline-0! ring-0! border-0! min-h-8 text-[18px]! text-[#060505c4] font-medium max-h-16 resize-none' value={text} onChange={(e) => setText(e.target.value)} onKeyDown={handleEnterPress} />
+        <Textarea className='w-full flex-1 focus-visible:ring-0 focus-visible:ring-offset-0 outline-0! ring-0! border-0! min-h-8 text-[18px]! text-[#060505c4] font-medium max-h-16 resize-none dark:text-white' value={text} onChange={(e) => setText(e.target.value)} onKeyDown={handleEnterPress} />
         <Button type='submit' className='cursor-pointer active:scale-95 p-0 bg-[#FFF2CF]! rounded-full w-12 h-12 flex items-center justify-center dark:bg-[#715A5A]! shadow-md'>
           <BsSendFill className='dark:text-white text-2xl active:scale-95 text-black' />
         </Button>

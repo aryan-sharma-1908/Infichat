@@ -1,16 +1,15 @@
 import React, { useContext, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { MdOutlineModeEditOutline } from "react-icons/md";
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from '@/components/ui/button';
-import { FaRegUser } from "react-icons/fa";
 import { FiEdit2 } from "react-icons/fi";
 import { toast } from "sonner"
 import apiClient from '@/lib/api-client';
 import { PROFILE_ROUTES, IMAGE_UPLOAD_ROUTES } from '@/utils/constants';
 import { UserContext } from '@/context/UserContext';
+import ThemeButton from '@/components/ui/ThemeButton'
 
 const ProfileSetup = () => {
   const { user, setUser, getUserInfo } = useContext(UserContext);
@@ -64,7 +63,7 @@ const ProfileSetup = () => {
           name,
           avatar: imageURL,
           description
-      })
+        })
 
         if (response_info.data.success)
           setUser(prev => ({
@@ -87,30 +86,85 @@ const ProfileSetup = () => {
 
   }
   return (
-    <div className='flex justify-center items-center w-full h-screen'>
-      <form onSubmit={handleSave}>
-        <div className="h-120 w-180 shadow-lg flex items-center p-3">
-          <div className={`profileImage rounded-full w-50 h-50 min-w-50 flex items-center justify-center group border-black border bg-gray-500/50 relative cursor-pointer shadow-md ${preview ? '' : 'p-5'}`} onClick={openPicker}>
-            <div className='absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition rounded-full'>
-              <FiEdit2 className=' text-white text-4xl' />
-            </div>
-            <img src={preview || '/user.png'} alt="" className='w-full h-full object-fit rounded-full' />
-          </div>
-          <input type="file" accept='image/*' ref={fileRef} onChange={handleFile} className='hidden' />
+    <div className='min-h-screen w-full flex items-center justify-center px-4 py-8 bg-[linear-gradient(160deg,#fef5f6_0%,#f2fafd_50%,#f8f4f8_100%)] dark:bg-[linear-gradient(135deg,#1a1516_0%,#0f1a1f_50%,#151a24_100%)] relative overflow-hidden'>
+      <div className="flex items-center justify-between mb-6 absolute top-5 left-5 gap-3">
+        <h1 className='text-2xl font-semibold text-gray-800 dark:text-white'>
+          <span className='text-[#fbadba]'>Infi</span>
+          <span className='text-[#2c7a8a] dark:text-[#8ADCF9]'>Chat</span>
+        </h1>
 
-          <div className='flex flex-col w-full px-6 gap-6'>
-            <div className='gap-2 flex flex-col'>
-              <div className='flex gap-1'>
-                <Label htmlFor="text">Display Name</Label>
-                <span className='text-red-600 font-bold'>*</span>
+        <div className="opacity-70 hover:opacity-100 transition">
+          <ThemeButton />
+        </div>
+      </div>
+      <form onSubmit={handleSave} className='w-full max-w-lg'>
+        <div className='bg-white dark:bg-[#37353E] rounded-2xl shadow-md border border-gray-200 dark:border-[#44444E] overflow-hidden'>
+          {/* Top accent strip */}
+          <div className='h-1.5 w-full flex'>
+            <span className='flex-1 bg-[#fbadba]' />
+            <span className='flex-1 bg-[#8ADCF9]' />
+          </div>
+          <div className='px-6 py-6'>
+            <div className='text-center mb-6'>
+              <h1 className='text-2xl font-semibold text-gray-800 dark:text-white'>
+                <span className='text-[#fbadba]'>Profile</span>
+                <span className='text-[#2c7a8a] dark:text-[#8ADCF9]'> setup</span>
+              </h1>
+              <p className='mt-1 text-sm text-gray-600 dark:text-[#D3DAD9]'>
+                Add a photo and a few details so friends can find you.
+              </p>
+            </div>
+
+            <div className='flex flex-col sm:flex-row sm:items-start gap-6'>
+              <div className='flex justify-center'>
+                <button
+                  type='button'
+                  onClick={openPicker}
+                  className='relative rounded-full w-28 h-28 sm:w-32 sm:h-32 flex items-center justify-center overflow-hidden border-2 border-[#fbadba]/50 dark:border-[#8ADCF9]/50 bg-gray-100 dark:bg-white/10 shadow-md group cursor-pointer'
+                >
+                  <img src={preview || '/user.png'} alt='' className='w-full h-full object-cover' />
+                  <div className='absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition rounded-full'>
+                    <FiEdit2 className='text-white text-2xl sm:text-3xl' />
+                  </div>
+                </button>
               </div>
-              <Input type="text" id="text" placeholder="Name" className='outline-0! ring-0!' value={name} onChange={(e) => setName(e.target.value)} />
+              <input type='file' accept='image/*' ref={fileRef} onChange={handleFile} className='hidden' />
+
+              <div className='flex-1 flex flex-col gap-4'>
+                <div className='flex flex-col gap-2'>
+                  <Label htmlFor='display-name' className='text-sm font-medium text-gray-700 dark:text-gray-300'>
+                    Display name <span className='text-[#fbadba]'>*</span>
+                  </Label>
+                  <Input
+                    id='display-name'
+                    type='text'
+                    placeholder='Your name'
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className='rounded-xl border border-gray-300 dark:border-gray-500 bg-gray-50/50 dark:bg-white/5 px-4 py-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-[#D3DAD9] focus-visible:ring-2 focus-visible:ring-[#8ADCF9]/60 focus-visible:border-[#8ADCF9]'
+                  />
+                </div>
+                <div className='flex flex-col gap-2'>
+                  <Label htmlFor='description' className='text-sm font-medium text-gray-700 dark:text-gray-300'>
+                    Description
+                  </Label>
+                  <Textarea
+                    id='description'
+                    placeholder='A short bio (optional)...'
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    className='rounded-xl border border-gray-300 dark:border-gray-500 bg-gray-50/50 dark:bg-white/5 px-4 py-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-[#D3DAD9] focus-visible:ring-2 focus-visible:ring-[#8ADCF9]/60 focus-visible:border-[#8ADCF9] resize-none min-h-[88px]'
+                  />
+                </div>
+                <Button
+                  type='submit'
+                  disabled={loading}
+                  className='rounded-xl bg-[#fbadba] hover:bg-[#f59aa8] text-gray-800 text-sm font-medium py-3 border-0 shadow-sm transition-colors active:scale-[0.99] mt-1'
+                >
+                  {loading ? 'Saving...' : 'Save'}
+                </Button>
+              </div>
             </div>
-            <div className='flex flex-col gap-2'>
-              <Label>Description</Label>
-              <Textarea className='outline-0! ring-0! resize-none' placeholder='Enter your description...' value={description} onChange={e => setDescription(e.target.value)} />
-            </div>
-            <Button className={`bg-green-600 hover:bg-green-700 w-20 h-10 text-white text-lg shadow-md border border-white`} type='submit' disabled={loading}>Save</Button>
           </div>
         </div>
       </form>

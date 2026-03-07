@@ -1,7 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Background from '@/assets/login2.png'
-import Victory from '@/assets/victory.svg'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -10,6 +8,7 @@ import { AUTH_ROUTES, SIGNUP_ROUTES } from '@/utils/constants'
 import { LOGIN_ROUTES } from '@/utils/constants'
 import { toast } from "sonner"
 import { UserContext } from '@/context/UserContext'
+import ThemeButton from '@/components/ui/ThemeButton'
 
 const Auth = () => {
     const [email, setEmail] = useState("")
@@ -27,6 +26,12 @@ const Auth = () => {
             toast.warning('Please enter required credentials for login!');
             setIsLoading(false)
             return
+        }
+
+        if (!isValidEmail(email)) {
+            toast.error("Enter a valid email!");
+            setIsLoading(false);
+            return;
         }
 
         try {
@@ -60,6 +65,12 @@ const Auth = () => {
             return;
         }
 
+        if (!isValidEmail(email)) {
+            toast.error("Enter a valid email!");
+            setIsLoading(false);
+            return;
+        }
+
         if (password != confirmPassword) {
             toast.error('Password not matching!')
             setIsLoading(false)
@@ -88,68 +99,143 @@ const Auth = () => {
     }
 
     const handleEnterPressSignUp = (e) => {
-        if(e.key === 'Enter') {
+        if (e.key === 'Enter') {
             e.preventDefault();
             handleSignup();
         }
     }
 
     const handleEnterPressLogin = (e) => {
-        if(e.key === 'Enter') {
+        if (e.key === 'Enter') {
             e.preventDefault();
             handleLogin();
         }
     }
 
-    return (
-        <div className='h-screen w-screen flex items-center justify-center'>
-            <div className='h-[80vh] bg-white border-2 border-white text-opacity-90 shadow-2xl w-[80vw] md:w-[90vw] lg:w-[70vw] xl:w-[60vw] rounded-3xl grid xl:grid-cols-2'>
-                <div className='flex flex-col gap-10 items-center justify-center'>
-                    <div className="flex items-center justify-center flex-col">
-                        <div className="flex items-center justify-center text-center">
-                            <h1 className='text-5xl font-bold md:text-6xl text-center'>Welcome</h1>
-                            <img src={Victory} alt="Victory emoji" className='h-[100px]' />
-                        </div>
+    const isValidEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
 
-                        <p className='font-medium text-center'>Fill in the details to get started with the best chat app</p>
-                        <div className="flex items-center justify-center w-full">
-                            <Tabs value={tab} onValueChange={setTab} className='w-3/4'>
-                                <TabsList className='bg-transparent rounded-none w-full'>
-                                    <TabsTrigger value='login' className='data-[state=active]:bg-transparent text-black border-b-2 rounded-none w-full data-[state=active]:text-black data-[state=active]:font-semibold data-[state=active]:border-b-purple-500 p-3 transition-all duration-300 text-opacity-90'>Login</TabsTrigger>
-                                    <TabsTrigger value='signup' className='data-[state=active]:bg-transparent text-black border-b-2 rounded-none w-full data-[state=active]:text-black data-[state=active]:font-semibold data-[state=active]:border-b-purple-500 p-3 transition-all duration-300 text-opacity-90'>Signup</TabsTrigger>
-                                </TabsList>
-                                <TabsContent value='login' className='flex flex-col gap-5 '>
-                                    <Input type="email" placeholder='Email' value={email} onKeyDown={handleEnterPressLogin} onChange={(e) => {
+    return (
+        <div className='min-h-screen w-full flex items-center justify-center px-4 py-8 bg-[linear-gradient(160deg,#fef5f6_0%,#f2fafd_50%,#f8f4f8_100%)] dark:bg-[linear-gradient(135deg,#1a1516_0%,#0f1a1f_50%,#151a24_100%)]'>
+            <div className="flex items-center justify-between mb-6 absolute top-5 left-5 gap-3">
+                <h1 className='text-2xl font-semibold text-gray-800 dark:text-white'>
+                    <span className='text-[#fbadba]'>Infi</span>
+                    <span className='text-[#2c7a8a] dark:text-[#8ADCF9]'>Chat</span>
+                </h1>
+
+                <div className="opacity-70 hover:opacity-100 transition">
+                    <ThemeButton />
+                </div>
+            </div>
+
+            <div className='dark:bg-[#37353E] dark:border-[#44444E] w-full max-w-md bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden'>
+                {/* Top accent strip using both colors */}
+                <div className='h-1.5 w-full flex'>
+                    <span className='flex-1 bg-[#fbadba]' />
+                    <span className='flex-1 bg-[#8ADCF9]' />
+                </div>
+                <div className='px-6 py-6'>
+                    <div className="mb-6 text-center">
+                        <h1 className='text-2xl font-semibold text-gray-800 dark:text-white'>
+                            <span className='text-[#fbadba]'>Infi</span><span className='text-[#2c7a8a] dark:text-[#8ADCF9]'>Chat</span>
+                        </h1>
+                        <p className='mt-2 text-sm text-gray-600 dark:text-[#D3DAD9]'>
+                            Sign in or create an account to start chatting with friends.
+                        </p>
+                    </div>
+
+                    <Tabs value={tab} onValueChange={setTab} className='w-full'>
+                        <TabsList className='w-full flex border-b border-gray-200 dark:border-gray-600 bg-transparent rounded-none mb-4'>
+                            <TabsTrigger
+                                value='login'
+                                className='w-1/2 pb-2.5 text-sm font-medium text-gray-500 dark:text-gray-400 data-[state=active]:text-gray-800 data-[state=active]:dark:text-white data-[state=active]:border-b-2 data-[state=active]:border-b-[#fbadba] rounded-none'
+                            >
+                                Login
+                            </TabsTrigger>
+                            <TabsTrigger
+                                value='signup'
+                                className='w-1/2 pb-2.5 text-sm font-medium text-gray-500 dark:text-gray-400 data-[state=active]:text-gray-800 data-[state=active]:dark:text-white data-[state=active]:border-b-2 data-[state=active]:border-b-[#8ADCF9] rounded-none'
+                            >
+                                Signup
+                            </TabsTrigger>
+                        </TabsList>
+
+                        <div className='min-h-[250px]'>
+                            <TabsContent value='login' className='mt-4 flex flex-col gap-4 data-[state=inactive]:hidden'>
+                                <Input
+                                    type="email"
+                                    placeholder='Email'
+                                    value={email}
+                                    onKeyDown={handleEnterPressLogin}
+                                    onChange={(e) => {
                                         setEmail(e.target.value)
                                     }}
-                                        className='rounded-full p-6' />
-                                    <Input type="password" placeholder='Password' value={password} onKeyDown={handleEnterPressLogin} onChange={(e) => {
+                                    className='rounded-xl border border-gray-300 dark:border-gray-500 bg-gray-50/50 dark:bg-white/5 px-4 py-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-[#D3DAD9] focus-visible:ring-2 focus-visible:ring-[#8ADCF9]/60 focus-visible:border-[#8ADCF9]'
+                                />
+                                <Input
+                                    type="password"
+                                    placeholder='Password'
+                                    value={password}
+                                    onKeyDown={handleEnterPressLogin}
+                                    onChange={(e) => {
                                         setPassword(e.target.value)
                                     }}
-                                        className='rounded-full p-6' />
-                                    <Button className='rounded-full p-6 bg-black text-white active:scale-95 text-xl' onClick={handleLogin}>Login</Button>
-                                </TabsContent>
-                                <TabsContent value='signup' className='flex flex-col gap-5'>
-                                    <Input type="email" placeholder='Email' value={email} required onKeyDown={handleEnterPressSignUp} onChange={(e) => {
-                                        setEmail(e.target.value) 
+                                    className='rounded-xl border border-gray-300 dark:border-gray-500 bg-gray-50/50 dark:bg-white/5 px-4 py-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-[#D3DAD9] focus-visible:ring-2 focus-visible:ring-[#8ADCF9]/60 focus-visible:border-[#8ADCF9]'
+                                />
+                                <Button
+                                    className='mt-1 rounded-xl bg-[#fbadba] hover:bg-[#f59aa8] text-gray-800 text-sm font-medium py-3 border-0 shadow-sm transition-colors active:scale-[0.99]'
+                                    onClick={handleLogin}
+                                >
+                                    Login
+                                </Button>
+                            </TabsContent>
+
+                            <TabsContent value='signup' className='mt-4 flex flex-col gap-4'>
+                                <Input
+                                    type="email"
+                                    placeholder='Email'
+                                    value={email}
+                                    required
+                                    onKeyDown={handleEnterPressSignUp}
+                                    onChange={(e) => {
+                                        setEmail(e.target.value)
                                     }}
-                                        className='rounded-full p-6' />
-                                    <Input type="password" placeholder='Password' value={password} required onKeyDown={handleEnterPressSignUp} onChange={(e) => {
+                                    className='rounded-xl border border-gray-300 dark:border-gray-500 bg-gray-50/50 dark:bg-white/5 px-4 py-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-[#D3DAD9] focus-visible:ring-2 focus-visible:ring-[#8ADCF9]/60 focus-visible:border-[#8ADCF9]'
+                                />
+                                <Input
+                                    type="password"
+                                    placeholder='Password'
+                                    value={password}
+                                    required
+                                    onKeyDown={handleEnterPressSignUp}
+                                    onChange={(e) => {
                                         setPassword(e.target.value)
                                     }}
-                                        className='rounded-full p-6' />
-                                    <Input type="password" placeholder='Confirm Password' value={confirmPassword} required onKeyDown={handleEnterPressSignUp} onChange={(e) => {
+                                    className='rounded-xl border border-gray-300 dark:border-gray-500 bg-gray-50/50 dark:bg-white/5 px-4 py-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-[#D3DAD9] focus-visible:ring-2 focus-visible:ring-[#8ADCF9]/60 focus-visible:border-[#8ADCF9]'
+                                />
+                                <Input
+                                    type="password"
+                                    placeholder='Confirm Password'
+                                    value={confirmPassword}
+                                    required
+                                    onKeyDown={handleEnterPressSignUp}
+                                    onChange={(e) => {
                                         setConfirmPassword(e.target.value)
                                     }}
-                                        className='rounded-full p-6' />
-                                    <Button className='rounded-full p-6 bg-black text-white active:scale-95 text-xl' onClick={handleSignup} disabled={isLoading}>{isLoading ? "signing up..." : "Signup"}</Button>
-                                </TabsContent>
-                            </Tabs>
+                                    className='rounded-xl border border-gray-300 dark:border-gray-500 bg-gray-50/50 dark:bg-white/5 px-4 py-3 text-sm text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-[#D3DAD9] focus-visible:ring-2 focus-visible:ring-[#8ADCF9]/60 focus-visible:border-[#8ADCF9]'
+                                />
+                                <Button
+                                    className='mt-1 rounded-xl bg-[#8ADCF9] hover:bg-[#6fd4f7] text-gray-800 text-sm font-medium py-3 border-0 shadow-sm transition-colors active:scale-[0.99]'
+                                    onClick={handleSignup}
+                                    disabled={isLoading}
+                                >
+                                    {isLoading ? "Signing up..." : "Sign up"}
+                                </Button>
+                            </TabsContent>
                         </div>
-                    </div>
-                </div>
-                <div className="hidden xl:flex justify-center items-center h-[600px]">
-                    <img src={Background} alt="background login" />
+                    </Tabs>
                 </div>
             </div>
         </div>

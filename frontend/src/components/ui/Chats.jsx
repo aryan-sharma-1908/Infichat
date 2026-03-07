@@ -68,21 +68,37 @@ const Chats = () => {
   }
 
   return (
-    <div className='h-screen flex items-stretch w-full'>
-      <div className="dark:bg-[#37353E] chats w-[25%] bg-white h-full shadow-xl flex flex-col">
+    <div className='h-screen w-full flex items-stretch bg-gradient-to-br from-[#050816] via-[#111827] to-[#020617]'>
+      <div className="chats w-full md:w-[30%] lg:w-[28%] xl:w-[26%] md:min-w-[260px] bg-white/90 dark:bg-[#37353E]/95 border-r border-black/5 dark:border-white/10 shadow-xl flex flex-col backdrop-blur">
         <div className='sticky top-0 z-10 mb-1'>
           <ChatsHeader searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
         </div>
-        <div className='chat group/users flex-1 overflow-y-auto scroll-smooth '>
-          {filteredFriends.map(friend => (
-            <Chat key={friend._id} friend={friend} isActive={friendId == friend._id} onClick={() => navigate(`/chats/${friend._id}`)} handleDeleteFriend={handleDeleteFriend}/>
-          ))}
+        <div className='chat group/users flex-1 overflow-y-auto scroll-smooth'>
+          {filteredFriends.length === 0 ? (
+            <div className="flex h-full items-center justify-center px-4 text-center text-sm text-gray-500 dark:text-gray-300">
+              <p>
+                {searchQuery
+                  ? 'No conversations match your search.'
+                  : "You don't have any chats yet. Add a friend to start a conversation."}
+              </p>
+            </div>
+          ) : (
+            filteredFriends.map(friend => (
+              <Chat
+                key={friend._id}
+                friend={friend}
+                isactive={friendId == friend._id}
+                onClick={() => navigate(`/chats/${friend._id}`)}
+                handleDeleteFriend={handleDeleteFriend}
+              />
+            ))
+          )}
         </div>
         <div className='sticky bottom-0 z-10 shadow-t-md'>
           <ChatsFooter name={user.name} avatar={user.avatar} />
         </div>
       </div>
-      <div className="messages w-[75%] bg-[#F8F9FA] bg-cover h-full fixed right-0">
+      <div className="messages flex-1 bg-[#F8F9FA] dark:bg-[#050816] bg-cover h-full">
         <Outlet />
       </div>
     </div>

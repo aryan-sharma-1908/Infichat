@@ -9,7 +9,7 @@ const Chat = ({ friend, isactive, onClick, handleDeleteFriend }) => {
     const { _id, name, description, avatar } = friend;
 
     return (
-        <div className={`w-full h-20 p-2 flex gap-3 hover:bg-gray-200/50 ${isactive && 'bg-gray-200/70'} cursor-pointer dark:border-0 relative dark:hover:bg-gray-500/50 group`} onClick={onClick}>
+        <div className={`w-full h-20 p-2 flex gap-3 hover:bg-gray-200/50 ${isactive && 'bg-gray-600/70'} cursor-pointer dark:border-0 relative dark:hover:bg-gray-500/50 group`} onClick={onClick}>
             <div className='w-14 h-14 min-w-14'>
                 <Avatar className='w-full h-full shadow-md'>
                     <AvatarImage src={avatar} className='rounded-full object-cover' />
