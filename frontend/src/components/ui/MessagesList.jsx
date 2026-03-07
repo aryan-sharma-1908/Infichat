@@ -84,7 +84,7 @@ const MessagesList = ({ messages, deleteMessage }) => {
             {contextMenu && (
                 <div
                     ref={menuRef}
-                    className="fixed bg-white shadow-lg rounded-md z-50 w-[180px]"
+                    className="fixed bg-white shadow-lg rounded-md z-50 w-[180px] dark:bg-gray-600/70"
                     style={{
                         ...(contextMenu.anchorX === 'left' ?
                             { left: contextMenu.x } : { right: window.innerWidth - contextMenu.x }
@@ -94,12 +94,12 @@ const MessagesList = ({ messages, deleteMessage }) => {
                         )
                     }}
                 >
-                    <button className="block w-full px-4 py-2 text-left hover:bg-gray-100" onClick={() => {
+                    <button className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:text-white dark:hover:bg-gray-400/70 border-b dark:border-b-gray-900" onClick={() => {
                         deleteMessage(contextMenu?.messageId, true)
                         setContextMenu(null);
                     }}>Delete for me</button>
                     {contextMenu.from === 'me' && (
-                        <button className='block w-full px-4 py-2 text-left hover:bg-gray-100' onClick={() => {
+                        <button className='block w-full px-4 py-2 text-left hover:bg-gray-100 dark:text-white dark:hover:bg-gray-400/70 dark:hover:bg-gray-400/70 ' onClick={() => {
                             deleteMessage(contextMenu?.messageId, false)
                             setContextMenu(null);
                         }}>Delete for everyone</button>

@@ -37,6 +37,12 @@ const MessageBubble = ({
               <p className='dark:text-white'>{text}</p>
             )}
 
+            {status === "pending" && image && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-lg">
+                <MdOutlineWatchLater className="text-white text-2xl" />
+              </div>
+            )}
+
             {/* IMAGE MESSAGE */}
             {image && (
               <img
