@@ -86,7 +86,7 @@ const ProfileSetup = () => {
 
   }
   return (
-    <div className='min-h-screen w-full flex items-center justify-center px-4 py-8 bg-[linear-gradient(160deg,#fef5f6_0%,#f2fafd_50%,#f8f4f8_100%)] dark:bg-[linear-gradient(135deg,#1a1516_0%,#0f1a1f_50%,#151a24_100%)] relative overflow-hidden'>
+    <div className='min-h-screen w-full flex items-center justify-center px-4 pt-24 pb-8 bg-[linear-gradient(160deg,#fef5f6_0%,#f2fafd_50%,#f8f4f8_100%)] dark:bg-[linear-gradient(135deg,#1a1516_0%,#0f1a1f_50%,#151a24_100%)] relative overflow-hidden'>
       <header className="absolute top-0 left-0 right-0 px-5 py-4 flex items-center justify-between">
         <div className='flex items-center gap'>
           <img src="/logo.png" alt="Logo" className="h-10 w-10" />
@@ -102,13 +102,13 @@ const ProfileSetup = () => {
         </div>
       </header>
       <form onSubmit={handleSave} className='w-full max-w-lg'>
-        <div className='bg-white dark:bg-[#37353E] rounded-2xl shadow-md border border-gray-200 dark:border-[#44444E] overflow-hidden'>
+            <div className='bg-white dark:bg-[#37353E] rounded-2xl shadow-md border border-gray-200 dark:border-[#44444E] overflow-hidden'>
           {/* Top accent strip */}
           <div className='h-1.5 w-full flex'>
             <span className='flex-1 bg-[#fbadba]' />
             <span className='flex-1 bg-[#8ADCF9]' />
           </div>
-          <div className='px-6 py-6 relative group'>
+          <div className='px-6 py-7 relative group'>
             <Button className='cursor-pointer hover:bg-gray-300/50 absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition duration-300' onClick={() => navigate(-1)}>
               <FaArrowLeft className='text-black text-2xl dark:text-white' />
             </Button>
@@ -122,7 +122,7 @@ const ProfileSetup = () => {
               </p>
             </div>
 
-            <div className='flex flex-col sm:flex-row sm:items-start gap-6'>
+            <div className='flex flex-col sm:flex-row sm:items-start gap-8'>
               <div className='flex justify-center'>
                 <button
                   type='button'

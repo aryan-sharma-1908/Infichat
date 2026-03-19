@@ -15,6 +15,7 @@ import { UserContext } from '@/context/UserContext'
 import ChatsFooter from './ChatsFooter'
 const Chats = () => {
   const { friendId } = useParams();
+  const hasActiveChat = Boolean(friendId);
   const { friends, setFriends, fetchFriends } = useContext(ChatContext);
   const navigate = useNavigate();
   const { connectSocket, disconnectSocket } = useContext(SocketContext);
@@ -63,12 +64,17 @@ const Chats = () => {
   }
 
   return (
-    <div className='h-screen w-full flex items-stretch bg-gradient-to-br from-[#050816] via-[#111827] to-[#020617]'>
-      <div className="chats w-full md:w-[30%] lg:w-[28%] xl:w-[26%] md:min-w-[260px] bg-white/90 dark:bg-[#37353E]/95 border-r border-black/5 dark:border-white/10 shadow-xl flex flex-col backdrop-blur">
+    <div className='relative h-[100dvh] w-full md:flex md:items-stretch bg-gradient-to-br from-[#050816] via-[#111827] to-[#020617] overflow-hidden'>
+      {/* Mobile: show either sidebar OR full-screen messages */}
+      <div
+        className={`chats w-full md:w-[30%] lg:w-[28%] xl:w-[26%] md:min-w-[260px] bg-white/90 dark:bg-[#37353E]/95 border-r border-black/5 dark:border-white/10 shadow-xl flex flex-col backdrop-blur ${
+          hasActiveChat ? 'hidden md:flex' : 'flex absolute inset-0 md:relative md:inset-auto'
+        }`}
+      >
         <div className='sticky top-0 z-10 mb-1'>
           <ChatsHeader searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
         </div>
-        <div className='chat group/users flex-1 overflow-y-auto scroll-smooth'>
+        <div className='chat group/users flex-1 min-h-0 overflow-y-auto scroll-smooth'>
           {filteredFriends.length === 0 ? (
             <div className="flex h-full items-center justify-center px-4 text-center text-sm text-gray-500 dark:text-gray-300">
               <p>
@@ -93,7 +99,14 @@ const Chats = () => {
           <ChatsFooter name={user.name} avatar={user.avatar} />
         </div>
       </div>
-      <div className="messages flex-1 bg-[#F8F9FA] dark:bg-[#050816] bg-cover h-full">
+      {/* Mobile: messages full-screen when chat is selected */}
+      <div
+        className={`messages h-full w-full md:w-auto bg-[#F8F9FA] dark:bg-[#050816] bg-cover ${
+          hasActiveChat
+            ? 'absolute inset-0 flex md:relative md:inset-auto md:flex-1'
+            : 'hidden md:flex md:flex-1'
+        }`}
+      >
         <Outlet />
       </div>
     </div>

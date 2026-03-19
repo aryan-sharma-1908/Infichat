@@ -257,7 +257,7 @@ const Conversation = () => {
 
 
   return (
-    <div className='flex flex-col h-full'>
+    <div className='flex flex-col h-full w-full'>
       <div className="shrink-0">
         <MessagesHeader onDeleteAll={handleDeleteAllMessages} />
       </div>

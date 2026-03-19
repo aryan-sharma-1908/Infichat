@@ -17,6 +17,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import apiClient from '@/lib/api-client'
 import { DELETE_ALL_MESSAGES_ROUTES } from '@/utils/constants'
 import { useNavigate } from 'react-router-dom'
+import { IoMdArrowRoundBack } from "react-icons/io";
 
 const MessagesHeader = ({ onDeleteAll }) => {
     const { friends } = useContext(ChatContext);
@@ -30,16 +31,24 @@ const MessagesHeader = ({ onDeleteAll }) => {
     if (!activeFriend) return null
     return (
         <div className='dark:bg-[#37353E] bg-white w-full h-22 flex items-center justify-between p-5 shadow-sm dark:border-0'>
-            <div className="user_info gap-4 flex justify-between items-center cursor-pointer" onClick={onFriendInfoClick}>
-                <div className="user_avatar w-14 h-14 min-w-14">
-                    <Avatar className='w-full h-full shadow-md border-2 border-white '>
-                        <AvatarImage src={activeFriend.avatar} className='rounded-full object-cover' />
-                        <AvatarFallback>{activeFriend.name}</AvatarFallback>
-                    </Avatar>
-                </div>
-                <div className='flex-col justify-between items-center'>
-                    <div className="dark:text-white user_name text-[#2B2A2A] text-2xl font-bold">{activeFriend.name}</div>
-                    <p className='dark:text-[#D3DAD9] font-medium text-gray-500'>click here to get {activeFriend.name} info</p>
+            <div className='flex items-center gap-5'>
+                <Button
+                    className='w-10 h-10 hover:bg-gray-200 cursor-pointer dark:hover:bg-gray-500/50'
+                    onClick={() => navigate('/chats')}
+                >
+                    <IoMdArrowRoundBack className='text-black dark:text-white hover:bg-gray-200' />
+                </Button>
+                <div className="user_info gap-4 flex justify-between items-center cursor-pointer" onClick={onFriendInfoClick}>
+                    <div className="user_avatar w-14 h-14 min-w-14">
+                        <Avatar className='w-full h-full shadow-md border-2 border-white '>
+                            <AvatarImage src={activeFriend.avatar} className='rounded-full object-cover' />
+                            <AvatarFallback>{activeFriend.name}</AvatarFallback>
+                        </Avatar>
+                    </div>
+                    <div className='flex-col justify-between items-center'>
+                        <div className="dark:text-white user_name text-[#2B2A2A] text-2xl font-bold">{activeFriend.name}</div>
+                        <p className='dark:text-[#D3DAD9] font-medium text-gray-500'>click here to get {activeFriend.name} info</p>
+                    </div>
                 </div>
             </div>
             <div>
@@ -48,7 +57,7 @@ const MessagesHeader = ({ onDeleteAll }) => {
                         <Button size='icon-lg' className='relative overflow-hidden rounded-full
                 before:content-[""] before:bg-transparent
                 before:scale-80 hover:before:bg-[#f1f1f1] before:absolute hover:before:scale-100 before:duration-300 before:inset-0 before:rounded-full cursor-pointer transition-transform dark:hover:before:bg-gray-700/30' >
-                            <span className='relative z-10 cursor-pointer'><SlOptionsVertical className='dark:text-white'/></span>
+                            <span className='relative z-10 cursor-pointer'><SlOptionsVertical className='dark:text-white' /></span>
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>

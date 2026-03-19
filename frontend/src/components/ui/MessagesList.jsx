@@ -33,24 +33,24 @@ const MessagesList = ({ messages, deleteMessage }) => {
     const openMessageContextMenu = (e, messageId, from) => {
         e.preventDefault();
         e.stopPropagation();
-        let x = e.clientX;
-        let y = e.clientY;
-        const containerHeight = 180;
-        const containerWidth = 80;
-        const viewPortWidth = window.innerWidth;
-        const viewPortHeight = window.innerHeight;
+        const x = e.clientX;
+        const y = e.clientY;
 
-        const anchorX = x + containerWidth + 120 > viewPortWidth ? 'right' : 'left';
-        const anchorY = y + containerHeight + 120 > viewPortHeight ? 'bottom' : 'top';
+        const MENU_WIDTH = 200; // keep in sync with w-[200px]
+        const MENU_PADDING = 10;
+        const optionsCount = from === 'me' ? 2 : 1;
+        const MENU_HEIGHT = optionsCount === 2 ? 110 : 68; // approx (2 items vs 1 item)
 
-        setContextMenu({
-            x,
-            y,
-            anchorX,
-            anchorY,
-            messageId,
-            from
-        })
+        const left = Math.min(
+            Math.max(x, MENU_PADDING),
+            window.innerWidth - MENU_WIDTH - MENU_PADDING
+        );
+        const top = Math.min(
+            Math.max(y, MENU_PADDING),
+            window.innerHeight - MENU_HEIGHT - MENU_PADDING
+        );
+
+        setContextMenu({ left, top, messageId, from })
     }
 
     console.log(messages);
@@ -84,25 +84,34 @@ const MessagesList = ({ messages, deleteMessage }) => {
             {contextMenu && (
                 <div
                     ref={menuRef}
-                    className="fixed bg-white shadow-lg rounded-md z-50 w-[180px] dark:bg-gray-600/70"
+                    className="fixed z-50 w-[200px] rounded-xl border border-black/10 bg-white shadow-lg overflow-hidden dark:bg-[#2B2B34] dark:border-white/10"
                     style={{
-                        ...(contextMenu.anchorX === 'left' ?
-                            { left: contextMenu.x } : { right: window.innerWidth - contextMenu.x }
-                        ),
-                        ...(contextMenu.anchorY === 'top' ?
-                            { top: contextMenu.y } : { bottom: contextMenu.y }
-                        )
+                        left: contextMenu.left,
+                        top: contextMenu.top,
                     }}
                 >
-                    <button className="block w-full px-4 py-2 text-left hover:bg-gray-100 dark:text-white dark:hover:bg-gray-400/70 border-b dark:border-b-gray-900" onClick={() => {
-                        deleteMessage(contextMenu?.messageId, true)
-                        setContextMenu(null);
-                    }}>Delete for me</button>
-                    {contextMenu.from === 'me' && (
-                        <button className='block w-full px-4 py-2 text-left hover:bg-gray-100 dark:text-white dark:hover:bg-gray-400/70 dark:hover:bg-gray-400/70 ' onClick={() => {
-                            deleteMessage(contextMenu?.messageId, false)
+                    <button
+                        className="w-full px-4 py-2.5 text-left text-sm hover:bg-gray-100 dark:text-white dark:hover:bg-[#44444E] flex items-center gap-2 border-b border-black/5 dark:border-white/10"
+                        onClick={() => {
+                            deleteMessage(contextMenu?.messageId, true)
                             setContextMenu(null);
-                        }}>Delete for everyone</button>
+                        }}
+                    >
+                        <span className="h-2 w-2 rounded-full bg-[#fbadba]" />
+                        Delete for me
+                    </button>
+
+                    {contextMenu.from === 'me' && (
+                        <button
+                            className="w-full px-4 py-2.5 text-left text-sm hover:bg-gray-100 dark:text-white dark:hover:bg-[#44444E] flex items-center gap-2"
+                            onClick={() => {
+                                deleteMessage(contextMenu?.messageId, false)
+                                setContextMenu(null);
+                            }}
+                        >
+                            <span className="h-2 w-2 rounded-full bg-[#8ADCF9]" />
+                            Delete for everyone
+                        </button>
                     )}
                 </div>
             )}
