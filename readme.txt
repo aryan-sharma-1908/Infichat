@@ -54,6 +54,8 @@ Infichat
 └── README.md
 ```
 
+# Project setup instructions:
+
 ## ⚙️ Installation
 
 ### 1️⃣ Clone the repository
