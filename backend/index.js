@@ -56,6 +56,7 @@ server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
+//Database Connection
 mongoose
   .connect(databaseURL)
   .then(() => {
