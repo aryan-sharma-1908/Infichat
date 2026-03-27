@@ -3,7 +3,7 @@ import { addFriendIfNotExists, deleteFriend, getFriends, getNonFriends, getUserI
 import { updateProfile } from "../controllers/UserControllers.js";
 
 const router = Router();
-
+//routes
 router.get('/', getUsers);
 router.post('/profile-setup', updateProfile);
 router.get('/non-friends', getNonFriends);
