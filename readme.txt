@@ -36,7 +36,7 @@ A **real-time chat application** built using the **MERN stack** that enables ins
 * JSON Web Tokens (JWT)
 
 ## 📂 Project Structure of Infi Chat
-
+Project Structure in detail
 ```
 Infichat
 │
