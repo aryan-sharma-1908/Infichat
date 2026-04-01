@@ -3,7 +3,7 @@ import upload from "../middlewares/MulterMiddleware.js";
 import { uploadImage } from "../controllers/UploadControllers.js";
 
 const router = Router();
-
+// Multer configuration updated 
 // Wrapper to catch async errors and Multer errors
 const handleUpload = (req, res, next) => {
   upload.single("image")(req, res, (err) => {

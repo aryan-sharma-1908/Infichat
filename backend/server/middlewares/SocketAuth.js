@@ -1,6 +1,7 @@
 import { Socket } from "socket.io";
 import jwt from "jsonwebtoken";
 
+//Messaging Authentication
 export const SocketAuth = (socket, next) => {
   try {
     const cookieHeader = socket.request.headers.cookie;

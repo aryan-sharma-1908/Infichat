@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+//Conversation Model
 const ConversationSchema = new mongoose.Schema(
   {
     members: [
