@@ -13,7 +13,7 @@ import { AttachIo, SocketAuth } from "./server/middlewares/SocketAuth.js";
 import http from 'http';
 import {Server} from 'socket.io';
 import { initSocket } from "./server/socket.js";
-
+import TranslateRoutes from './routes/TranslateRoutes.js';
 dotenv.config();
 
 const PORT = process.env.PORT || 3001;
@@ -51,6 +51,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/user", AuthMiddleware, userRoutes);
 app.use("/api/messages", AuthMiddleware, MessageRoutes);
+app.use('/api/translate', AuthMiddleware, TranslateRoutes)
 
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
